@@ -1,0 +1,150 @@
+body {
+  font: normal 16px Helvetica, Arial, sans-serif;
+  height: 100vh;
+  background: transparent no-repeat url('../images/googlelogo_color_272x92dp.png');
+  background-size: 305px 100px;
+  background-position: 50% 30%;
+}
+
+header {
+  overflow: hidden;
+}
+
+header nav {
+  float: right;
+  margin-right: 10px;
+}
+
+header nav ul li {
+  float: left;
+  padding-right: 10px;
+}
+
+nav ul {
+  list-style: none;
+  line-height: 30px;
+}
+
+li a {
+  color: rgb(135, 135, 135);
+  text-decoration: none;
+}
+
+header nav ul li:last-of-type {
+  padding-bottom: 5px;
+}
+
+.fa-th,
+.fa-bell {
+  color: rgb(135, 135, 135);
+}
+
+.user-icon {
+  display: inline-block;
+  height: 30px;
+  width: 30px;
+  margin-bottom: 5px;
+  background: rgb(171, 71, 188);
+  text-align: center;
+  border-radius: 50%;
+  color: white;
+}
+
+.user-icon:hover {
+  background: rgb(151, 51, 168);
+}
+
+header li {
+  vertical-align: top;
+}
+
+header a {
+  vertical-align: top;
+}
+
+main {
+  margin: 0 auto;
+  padding-top: 300px;
+  text-align: center;
+}
+
+main input {
+  display: block;
+  height: 40px;
+  width: 486px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 35px;
+  text-indent: 5px;
+  border: 1px solid rgb(232, 232, 232);
+}
+
+.highlighted:hover {
+  color: rgb(34, 34, 34);
+}
+.search-field {
+  position: relative;
+}
+
+.search-field .fa-microphone {
+  position: absolute;
+  bottom: 77px;
+  left: 375px;
+  color: rgb(142, 142, 142);
+}
+
+main a {
+  display: inline-block;
+  height: 30px;
+  padding: 5px;
+  line-height: 30px;
+  text-decoration: none;
+  background: rgb(242, 242, 242);
+  color: rgb(142, 142, 142);
+  font-weight: bold;
+}
+
+main a:nth-of-type(1) {
+  width: 135px;
+  margin-right: 5px;
+}
+
+main a:nth-of-type(2) {
+  width: 165px;
+
+}
+
+main a:hover {
+  color: rgb(82, 82, 82);
+}
+
+main img {
+  display: block;
+  height: 60px;
+  width: 30px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-top: 30px;
+}
+
+footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgb(242, 242, 242);
+}
+
+footer nav ul {
+  margin-left: -10px;
+}
+
+footer nav ul li {
+  float: left;
+  height: 30px;
+  margin-right: 10px;
+}
+
+footer nav ul li:nth-child(n+4) {
+  float: right;
+}
