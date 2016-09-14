@@ -19,7 +19,31 @@ header h1 {
   padding-left: 84px;
 }
 
+nav a.current {
+  background: lighten($black, 5%);
+}
+
 label { display: block; }
+
+.flash {
+  width: 600px;
+  padding: 5px;
+  font-weight: bold;
+  margin: 20px;
+  background: lighten($red, 60%);
+  color: $red;
+  border: 1px solid $red;
+}
+
+.ui-datepicker {
+  background: $white;
+  border: 1px solid $black;
+}
+
+.ui-datepicker a {
+  text-decoration: none;
+  color: $black;
+}
 
 @mixin tabs ($background: blue, $color: yellow) {
   ul {

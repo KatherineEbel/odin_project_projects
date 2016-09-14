@@ -1,21 +1,19 @@
 doctype html
 html lang="en"
   head
-    title == @title || "Songs By Sinatra"
-    link rel="stylesheet" href="/styles.css" media="all"
     meta charset="utf-8"
+    title == @title
+    link href="http://code.jquery.com/ui/1.9.1/themes/jquery-ui.css" media="screen, projection" rel="stylesheet"
+    == css :styles
+    script src="http://code.jquery.com/jquery-1.8.2.min.js"
+    script src="http://code.jquery.com/ui/1.9.0/jquery-ui.js"
+    script src="/javascripts/application.js"
   body
     header
       h1 Songs By Sinatra
-      nav
-        ul
-          li <a href="/" title="Home">Home</a>
-          li <a href="/about" title="About">About</a>
-          li <a href="/contact" title="Contact">Contact</a>
-          li <a href="/songs" title="Songs">Songs</a>
-        ul
-      nav
+      == slim :nav
     header
     section
+      == styled_flash
       == yield
 
