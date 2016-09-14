@@ -1,4 +1,4 @@
-require 'sinatra'
+require 'sinatra/base'
 require 'slim'
 require 'sass'
 require './song.rb'
@@ -6,23 +6,24 @@ require 'sinatra/flash'
 require 'pony'
 require 'v8'
 require 'coffee-script'
-require 'sinatra/reloader' if development?
+#require 'sinatra/reloader' if development?
 
-configure :development do
-  DataMapper.setup(:default, "sqlite3://#{Dir.pwd}/development.db");
-end
+class Website < Sinatra::Base
+  register Sinatra::Flash
 
-configure do
-  enable :sessions
-  set :username, 'frank'
-  set :password, 'sinatra'
-end
+  configure :development do
+  end
 
-before do
-  set_title
-end
+  configure do
+    enable :sessions
+    set :username, 'frank'
+    set :password, 'sinatra'
+  end
 
-helpers do
+  before do
+    set_title
+  end
+
   def css(*stylesheets)
     stylesheets.map do |stylesheet|
       "<link href=\"/#{stylesheet}.css\" media=\"screen, projection\" rel=\"stylesheet\"/>"
@@ -54,51 +55,54 @@ helpers do
         :domain => 'localhost.localdomain'
       })
   end
-end
 
+  get('/styles.css') { scss :styles }
 
-get('/styles.css') { scss :styles }
-get('/javascripts/application.js') { coffee :application }
+  get('/javascripts/application.js') { coffee :application }
 
-get '/login' do
-  slim :login
-end
-
-get '/logout' do
-  session.clear
-  redirect to('/login')
-end
-
-post '/contact' do
-  send_message
-  flash[:notice] = "Thank you for your message. We'll be in touch soon."
-  redirect to('/')
-end
-
-post '/login' do
-  if params[:username] == settings.username && params[:password] = settings.password
-    session[:admin] = true
-    redirect to('/')
-  else
+  get '/login' do
     slim :login
   end
+
+  get '/logout' do
+    session.clear
+    redirect to('/login')
+  end
+
+  post '/contact' do
+    send_message
+    flash[:notice] = "Thank you for your message. We'll be in touch soon."
+    redirect to('/')
+  end
+
+  post '/login' do
+    if params[:username] == settings.username && params[:password] = settings.password
+      session[:admin] = true
+      redirect to('/')
+    else
+      slim :login
+    end
+  end
+
+  get '/' do
+    slim :home
+  end
+
+  get '/about' do
+    @title = 'All about this Site'
+    slim :about
+  end
+
+  get '/contact' do
+    @title = 'Contact Us'
+    slim :contact
+  end
+
+
+  not_found do
+    slim :not_found
+  end
+
+  #run! if app_file == $0
 end
 
-get '/' do
-  slim :home
-end
-
-get '/about' do
-  @title = 'All about this Site'
-  slim :about
-end
-
-get '/contact' do
-  @title = 'Contact Us'
-  slim :contact
-end
-
-
-not_found do
-  slim :not_found
-end

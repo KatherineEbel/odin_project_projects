@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 source :rubygems
+gem 'rack', '<2.0'
 gem 'sinatra'
+gem 'sinatra-flash'
+gem 'pony'
 gem 'slim'
 gem 'sass'
 gem 'dm-core'

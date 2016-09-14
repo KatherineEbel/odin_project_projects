@@ -1,6 +1,9 @@
+require 'sinatra/base'
 require 'dm-core'
 require 'dm-migrations'
-
+require 'slim'
+require 'sass'
+require 'sinatra/flash'
 
 class Song
   include DataMapper::Resource
@@ -30,63 +33,99 @@ module SongHelpers
   end
 end
 
-helpers SongHelpers
+class SongController < Sinatra::Base
+  enable :method_override
+  register Sinatra::Flash
+
+  helpers SongHelpers
+
+  configure do
+    enable :sessions
+    set :username, 'frank'
+    set :password, 'sinatra'
+  end
+
+  configure :development do
+    DataMapper.setup(:default, "sqlite3://#{Dir.pwd}/development.db");
+  end
+
+  before do
+    set_title
+  end
+
+  def css(*stylesheets)
+    stylesheets.map do |stylesheet|
+      "<link href=\"/#{stylesheet}.css\" media=\"screen, projection\" rel=\"stylesheet\"/>"
+    end.join
+  end
+
+  def current?(path='/')
+    (request.path == path || request.path == path + '/') ? "current" : nil
+  end
+
+  def set_title
+    @title ||= "Songs By Sinatra"
+  end
+
+  get '/' do
+    @songs = find_songs
+    slim :songs
+  end
+
+  # new song
+  get '/new' do
+    halt(401, 'Not Authorized') unless session[:admin]
+    @song = Song.new
+    slim :new_song
+  end
+
+  post '/' do
+    @song = create_song
+    flash[:notice] = "song successfully added" if @song
+    redirect to("/songs/#{@song.id}")
+  end
+
+  # show song
+  get '/:id' do
+    halt(401, 'Not Authorized') unless session[:admin]
+    @song = find_song
+     slim :show_song
+  end
+
+  # edit song
+  get '/:id/edit' do
+    halt(401, 'Not Authorized') unless session[:admin]
+    @song = find_song
+    slim :edit_song
+  end
+
+  put '/:id' do
+    halt(401, 'Not Authorized') unless session[:admin]
+    song = find_song
+    if song.update(params[:song])
+      flash[:notice] = "Song successfully updated"
+    end
+    redirect to("/songs/#{song.id}")
+  end
+
+  delete '/:id' do
+    halt(401, 'Not Authorized') unless session[:admin]
+    if find_song.destroy
+      flash[:notice] = "Song deleted"
+    end
+    redirect to('/songs')
+  end
+
+  post '/:id/like' do
+    @song = find_song
+    @song.likes = @song.likes.next
+    @song.save
+    redirect to"/songs/#{@song.id}" unless request.xhr?
+    slim :like, :layout => false
+  end
+end
+
 
 DataMapper.finalize
 
-get '/songs' do
-  @songs = find_songs
-  slim :songs
-end
 
-# new song
-get '/songs/new' do
-  halt(401, 'Not Authorized') unless session[:admin]
-  @song = Song.new
-  slim :new_song
-end
-
-post '/songs' do
-  @song = create_song
-  flash[:notice] = "song successfully added" if @song
-  redirect to("/songs/#{@song.id}")
-end
-
-# show song
-get '/songs/:id' do
-  halt(401, 'Not Authorized') unless session[:admin]
-  @song = find_song
-   slim :show_song
-end
-
-# edit song
-get '/songs/:id/edit' do
-  halt(401, 'Not Authorized') unless session[:admin]
-  @song = find_song
-  slim :edit_song
-end
-
-put '/songs/:id' do
-  halt(401, 'Not Authorized') unless session[:admin]
-  song = find_song
-  if song.update(params[:song])
-    flash[:notice] = "Song successfully updated"
-  end
-  redirect to("/songs/#{song.id}")
-end
-
-delete '/songs/:id' do
-  halt(401, 'Not Authorized') unless session[:admin]
-  if find_song.destroy
-    flash[:notice] = "Song deleted"
-  end
-  redirect to('/songs')
-end
-
-post '/songs/:id/like' do
-  @song = find_song
-  @song.likes = @song.likes.next
-  @song.save
-  redirect to"/songs/#{@song.id}" unless request.xhr?
-  slim :like, :layout => false
-end
