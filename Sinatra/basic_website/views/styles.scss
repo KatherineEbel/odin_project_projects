@@ -35,14 +35,20 @@ label { display: block; }
   border: 1px solid $red;
 }
 
-.ui-datepicker {
-  background: $white;
-  border: 1px solid $black;
-}
 
-.ui-datepicker a {
-  text-decoration: none;
-  color: $black;
+#like {
+  p {
+    font-weight: bold;
+    color: $red;
+  }
+  input {
+    background: $red;
+    border: darken($red, 10%) 1px solid;
+    height: 30px;
+    line-height: 30px;
+    padding-bottom: 5px;
+    color: lighten($red, 80%);
+  }
 }
 
 @mixin tabs ($background: blue, $color: yellow) {
